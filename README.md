@@ -1,3 +1,13 @@
+# PLEASE READ
+# New Pose Estimation Files:
+ * Media Pipe...
+ * bicep_curl_up
+ * squats
+ * pushup **THIS IS NOT YET DONE will update soon**
+
+**Run individual exercise file to try the pose estimation and original file is the MEDIA PIPE... file**
+
+
 # Realtime Human Pose Estimation - OpenCV - Mediapipe
 
 **Complete Video Tutorial:** https://youtu.be/JetpMzU8-Pc
