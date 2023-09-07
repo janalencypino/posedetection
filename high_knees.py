@@ -8,7 +8,7 @@ mp_pose = mp.solutions.pose
 def calculate_angle(a,b,c):
     a = np.array(a) # Shoulder
     b = np.array(b) # Hip
-    c = np.array(c) # Knees
+    c = np.array(c) # Knee
     
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
     angle = np.abs(radians*180.0/np.pi)
@@ -45,25 +45,25 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             landmarks = results.pose_landmarks.landmark
             
             # Get coordinates
-            shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-            knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+            knee = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+            ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
             
             # Calculate angle
-            angle = calculate_angle(shoulder,hip,knee)
+            angle = calculate_angle(hip, knee, ankle)
             
             # Visualize angle
-            cv2.putText(image, str(angle), 
-                           tuple(np.multiply(hip, [640, 480]).astype(int)), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
-                                )
+            # cv2.putText(image, str(angle), 
+            #               tuple(np.multiply(hip, [640, 480]).astype(int)), 
+            #               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
+            #                    )
             
             #print(angle)
-            # Curl counter logic
+            # Lunge counter logic
             if angle <120:
-                stage = "down"
-            if angle >170 and stage =='down':
-                stage="up"
+                stage = "up"
+            if stage =='up' and angle >150:
+                stage="down"
                 counter +=1
                 print(counter)
                        
