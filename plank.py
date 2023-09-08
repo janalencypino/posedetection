@@ -12,11 +12,15 @@ def calculate_angle(a,b,c):
     
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
     angle = np.abs(radians*180.0/np.pi)
+    angle2 = np.abs(radians*180.0/np.pi)
     
     if angle >180.0:
         angle = 360-angle
-        
-    return angle 
+    
+    if angle2 >180.0:
+        angle2 = 360-angle2  
+    
+    return angle
 
 cap = cv2.VideoCapture(0)
 
@@ -45,28 +49,37 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             landmarks = results.pose_landmarks.landmark
             
             # Get coordinates
+            shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+            elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+            wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
+           
             hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
             knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
             ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
             
-            # Calculate angle
-            angle = calculate_angle(hip, knee, ankle)
-            
+            # Calculate angle number 1
+            angle = calculate_angle(shoulder, elbow, wrist)
+            # Calculate angle number 2
+            angle2 = calculate_angle(hip, knee, ankle)
+
             # Visualize angle
-            # cv2.putText(image, str(angle), 
-            #               tuple(np.multiply(hip, [640, 480]).astype(int)), 
-            #               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
-            #                    )
+            cv2.putText(image, str(angle2), 
+                           tuple(np.multiply(hip, [640, 480]).astype(int)), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
+                                )
             
             # print(angle)
-            # squats counter logic
-            if angle <= 90:
-                stage = "down"
-            if angle >= 160 and stage =='down':
-                stage="up"
-                counter +=1
+            # plank counter logic
+            if angle < 90:
+                stage = "adjust your arms"
+    
+                if angle2 < 170:
+                    stage="lower your hip position"
+                elif angle2 >= 170:
+                    stage="down" 
+                    counter +=1
                 print(counter)
-                       
+
         except:
             pass
         
