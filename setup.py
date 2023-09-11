@@ -39,7 +39,7 @@ def get_coordinates(landmarks):
 def display_angle(image, angle, elbow):
     cv2.putText(image, str(angle), tuple(np.multiply(elbow, [640, 480]).astype(int)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
-def render_curl_counter(image, counter, stage):
+def render_counter(image, counter, stage):
     # Setup status box
     cv2.rectangle(image, (0,0), (225,73), (245,117,16), -1)
     

@@ -9,7 +9,7 @@ from setup import recolor_image
 from setup import get_coordinates
 from setup import calculate_angle
 from setup import display_angle
-from setup import render_curl_counter
+from setup import render_counter
 from setup import render_detections
 
 # import exercises counter logic
@@ -41,7 +41,7 @@ def main():
             except:
                 pass
 
-            render_curl_counter(image, counter, stage)
+            render_counter(image, counter, stage)
             render_detections(image, results)
             
             cv2.imshow('Mediapipe Feed', image)
