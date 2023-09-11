@@ -1,3 +1,5 @@
+#BELOW IS ALL EXERCISE COUNTER LOGIC
+
 #BICEP CURL UP 
 def curl_counter_logic(angle, stage, counter):
     if angle > 160:

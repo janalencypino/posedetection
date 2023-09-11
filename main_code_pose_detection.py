@@ -2,6 +2,19 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
+# import setup
+from setup import setup_camera
+from setup import process_image
+from setup import recolor_image
+from setup import get_coordinates
+from setup import calculate_angle
+from setup import display_angle
+from setup import render_curl_counter
+from setup import render_detections
+
+# import exercises counter logic
+from all_exercises import curl_counter_logic
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
@@ -23,7 +36,7 @@ def main():
                 shoulder, elbow, wrist = get_coordinates(landmarks)
                 angle = calculate_angle(shoulder, elbow, wrist)
                 display_angle(image, angle, elbow)
-                print(angle)
+                print(counter)
                 stage, counter = curl_counter_logic(angle, stage, counter)
             except:
                 pass
