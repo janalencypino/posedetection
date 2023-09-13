@@ -23,6 +23,8 @@ cap = cv2.VideoCapture(0)
 # Curl counter variables
 counter = 0 
 stage = None
+inside = 31
+ave = 0
 
 ## Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
@@ -64,9 +66,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 stage = "down"
             if angle < 30 and stage =='down':
                 stage="up"
+                if inside > angle:
+                    inside = angle
+            if angle > 30 and stage == "up":
                 counter +=1
-                print(counter)
-                       
+                ave += inside
+                inside = 0
+            print(ave)   
+
         except:
             pass
         
