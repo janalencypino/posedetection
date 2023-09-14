@@ -1,0 +1,17 @@
+{% extends "fitquest_template.html" %}
+{% block title %}
+    FitQuest: Select your routine
+{% endblock %}
+{% block header_data %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_premade_routine.css') }}">
+{% endblock %}
+{% block content %}
+    <div id="page_flavor_text">
+        READY-MADE ROUTINE
+    </div>
+    <a class="btn btn-light" id="routine_start" href="/user_id={{id}}/ready">START</a>
+    <div id="interactible_container">
+        <div class="routine_widget">
+        </div>
+    </div>
+{% endblock %}
