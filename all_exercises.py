@@ -1,14 +1,19 @@
 #BELOW IS ALL EXERCISE COUNTER LOGIC
 
 #BICEP CURL UP 
-def curl_counter_logic(angle, stage, counter):
+def curl_counter_logic(angle, stage, ave, counter):
     if angle > 160:
         stage = "down"
-    if angle < 30 and stage == 'down':
-        stage = "up"
-        counter += 1
-        print(counter)
-    return stage, counter
+    if angle < 30 and stage =='down':
+        stage="up"
+        counter +=1
+        if inside > angle:
+            inside = angle
+    if angle > 30 and stage == "up":
+        ave += inside
+        inside = 31
+        stage = "down"
+        print(ave)
 
 #SQUATS 
 def squats_counter_logic(angle, stage, counter):
