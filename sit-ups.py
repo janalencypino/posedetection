@@ -71,6 +71,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             if angle > 30 and stage == "up":
                 counter +=1
                 ave += inside
+                inside = 31
                 inside = 0
             print(ave)   
 
