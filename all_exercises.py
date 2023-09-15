@@ -1,7 +1,7 @@
 #BELOW IS ALL EXERCISE COUNTER LOGIC
 
 #BICEP CURL UP 
-def curl_counter_logic(angle, stage, ave, counter):
+def curl(angle, stage, ave, counter):
     if angle > 160:
         stage = "down"
     if angle < 30 and stage =='down':
@@ -14,31 +14,44 @@ def curl_counter_logic(angle, stage, ave, counter):
         inside = 31
         stage = "down"
         print(ave)
+    return stage, ave
 
 #SQUATS 
-def squats_counter_logic(angle, stage, counter):
+def squats(angle, ave, stage, counter):
     if angle <= 90:
         stage = "down"
-    if angle >= 160 and stage =='down':
+    if angle > 160 and stage =='down':
         stage="up"
         counter +=1
-    return stage, counter
+        if inside > angle:
+            inside = angle
+    if angle < 160 and stage == 'up':
+        ave += inside
+        inside = 161
+        stage = "down"
+        print(ave)
+    return stage, ave
 
 #PUSH-UP
-def pushup_counter_logic(angle, angle2, stage, counter):
+def pushup(angle, angle2, ave, stage, counter):
     if angle <= 70:
-        stage = "down"
+        stage = "down"      
     elif stage =='down' and angle >= 160:
         stage="up"
-        if angle2 > 160 and angle2 < 180:
-            stage="incorrect position"
+        if angle2 < 160 and angle2 < 180:
+            stage="wrong"
         else: 
             counter +=1     
-            print(counter)
-    return stage, counter
+        #   print(counter)
+    if stage == 'up' and angle < 160:
+        ave += inside
+        inside = 161
+        stage = "down"
+        print(ave)
+    return stage, ave
 
 #PLANK
-def plank_counter_logic(angle, angle2, stage, counter):
+def plank(angle, angle2, stage, counter):
     if angle < 90:
         stage = "adjust your arms"
         if angle2 < 170:
@@ -48,3 +61,70 @@ def plank_counter_logic(angle, angle2, stage, counter):
             counter +=1
             print(counter)
     return stage, counter
+
+#SIT-UPS
+def situps(angle, ave, stage, counter):
+    if angle > 120:
+        stage = "down"
+    if angle < 30 and stage =='down':
+        stage="up"
+        counter +=1
+        if inside > angle:
+            inside = angle
+    if angle > 30 and stage == 'up':
+        ave += inside
+        inside = 31
+        stage = "down"
+        print(ave)
+    return stage, ave
+
+#LUNGES
+def lunges(angle, ave, stage, counter):
+    if angle > 160:
+        stage = "up"
+    if stage =='up' and angle < 90:
+        stage="down"
+        counter +=1
+    #   print(counter)
+        if inside > angle:
+            inside = angle
+    if angle > 90 and stage == 'down':
+        ave += inside
+        inside = 91
+        stage = "up"
+        print(ave)
+    return stage, ave
+
+#HIGH KNEES
+def high_knees(angle, ave, stage, counter):
+    if angle < 120:
+        stage = "up"
+    if stage =='up' and angle > 150:
+        stage="down"
+        counter +=1
+    #   print(counter)
+        if inside > angle:
+            inside = angle
+    if angle > 150 and stage == 'down':
+        ave += inside
+        inside = 151
+        stage = "up"
+        print(ave)
+    return stage, ave
+
+#GLUTE BRIDGES
+def glute_bridges(angle, ave, stage, counter):
+    if angle < 120:
+        stage = "down"
+    if angle > 170 and stage =='down':
+        stage="up"
+        counter +=1
+    #   print(counter)
+        if inside > angle:
+            inside = angle
+    if angle < 170 and stage == 'up':
+        ave += inside
+        inside = 169
+        stage = "down"
+        print(ave)
+    return stage, ave

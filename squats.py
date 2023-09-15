@@ -23,6 +23,8 @@ cap = cv2.VideoCapture(0)
 # Curl counter variables
 counter = 0 
 stage = None
+inside = 161
+ave = 0
 
 ## Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
@@ -62,11 +64,17 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             # squats counter logic
             if angle <= 90:
                 stage = "down"
-            if angle >= 160 and stage =='down':
+            if angle > 160 and stage =='down':
                 stage="up"
                 counter +=1
-                print(counter)
-                       
+                if inside > angle:
+                    inside = angle
+            if angle < 161 and stage == 'up':
+                ave += inside
+                inside = 161
+                stage = "down"
+                print(ave)   
+
         except:
             pass
         

@@ -13,7 +13,14 @@ from setup import render_counter
 from setup import render_detections
 
 # import exercises counter logic
-from all_exercises import curl_counter_logic
+from all_exercises import curl
+from all_exercises import pushup
+from all_exercises import squats
+from all_exercises import lunges
+from all_exercises import plank
+from all_exercises import situps
+from all_exercises import high_knees
+from all_exercises import glute_bridges
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -23,6 +30,8 @@ def main():
     cap = setup_camera()
     counter = 0 
     stage = None
+    ave = 0
+
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
@@ -36,12 +45,12 @@ def main():
                 shoulder, elbow, wrist = get_coordinates(landmarks)
                 angle = calculate_angle(shoulder, elbow, wrist)
                 display_angle(image, angle, elbow)
-                print(counter)
-                stage, counter = curl_counter_logic(angle, stage, counter)
+                print(ave)
+                stage, ave = curl(angle, ave, stage, counter)
             except:
                 pass
 
-            render_counter(image, counter, stage)
+            # render_counter(image, counter, stage)
             render_detections(image, results)
             
             cv2.imshow('Mediapipe Feed', image)
