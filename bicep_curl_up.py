@@ -73,7 +73,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 ave += inside
                 inside = 31
                 stage = "down"
-                print(ave)             
+                print(ave)              
             
             # perf = ave / counter (1-30)
             # if perf == 30 then ang rating star kay 5 stars
