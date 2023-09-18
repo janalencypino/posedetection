@@ -46,11 +46,12 @@ def main():
                 angle = calculate_angle(shoulder, elbow, wrist)
                 display_angle(image, angle, elbow)
                 print(ave)
-                stage, ave = curl(angle, ave, stage, counter)
+                print(angle)
+                stage, ave, counter = curl(angle, ave, stage, counter)
             except:
                 pass
 
-            # render_counter(image, counter, stage)
+            render_counter(image, counter, stage)
             render_detections(image, results)
             
             cv2.imshow('Mediapipe Feed', image)

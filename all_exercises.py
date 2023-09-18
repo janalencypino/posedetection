@@ -14,7 +14,8 @@ def curl(angle, stage, ave, counter):
         inside = 31
         stage = "down"
         print(ave)
-    return stage, ave
+        print(counter)
+    return stage, counter, ave
 
 #SQUATS 
 def squats(angle, ave, stage, counter):
@@ -30,7 +31,7 @@ def squats(angle, ave, stage, counter):
         inside = 161
         stage = "down"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
 
 #PUSH-UP
 def pushup(angle, angle2, ave, stage, counter):
@@ -48,7 +49,7 @@ def pushup(angle, angle2, ave, stage, counter):
         inside = 161
         stage = "down"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
 
 #PLANK
 def plank(angle, angle2, stage, counter):
@@ -76,7 +77,7 @@ def situps(angle, ave, stage, counter):
         inside = 31
         stage = "down"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
 
 #LUNGES
 def lunges(angle, ave, stage, counter):
@@ -93,7 +94,7 @@ def lunges(angle, ave, stage, counter):
         inside = 91
         stage = "up"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
 
 #HIGH KNEES
 def high_knees(angle, ave, stage, counter):
@@ -110,7 +111,7 @@ def high_knees(angle, ave, stage, counter):
         inside = 151
         stage = "up"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
 
 #GLUTE BRIDGES
 def glute_bridges(angle, ave, stage, counter):
@@ -127,4 +128,4 @@ def glute_bridges(angle, ave, stage, counter):
         inside = 169
         stage = "down"
         print(ave)
-    return stage, ave
+    return stage, counter, ave
