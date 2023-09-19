@@ -65,14 +65,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             if angle > 160:
                 stage = "down"
             if angle < 30 and stage =='down':
-                stage="up"
+                stage = "up"
                 counter +=1
                 if inside > angle:
                     inside = angle
             if angle > 30 and stage == 'up':
                 ave += inside
                 inside = 31
-                stage = "down"
+                stage = "down" 
                 print(ave)              
             
             # perf = ave / counter (1-30)
