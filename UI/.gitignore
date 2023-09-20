@@ -1,0 +1,9 @@
+config.py
+assets\*
+assets
+*.bat
+*.xcf
+__pycache__
+venv/Lib/site-packages/werkzeug/debug/shared/*.png
+venv/*
+env/*
