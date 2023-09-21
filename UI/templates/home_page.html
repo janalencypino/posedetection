@@ -4,15 +4,4 @@
 {% endblock %}
 {% block content %}
     <a href="/user_login" class="btn btn-light" id="start">START</a>
-
-    <script>
-        document.getElementById('start').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.body.classList.add('fade-out');
-            setTimeout(function() {
-                window.location.href = event.target.href;
-            }, 500);
-        });
-    </script>
-    
 {% endblock %}
