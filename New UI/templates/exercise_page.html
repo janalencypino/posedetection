@@ -1,0 +1,37 @@
+{% extends "fitquest_template.html" %}
+{% block title %}
+    FitQuest: Exorcise
+{% endblock %}
+{% block header_data %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exercise_page.css') }}">
+{% endblock %}
+{% block content %}
+<div id="exercise_main_container">
+    <div id="data" data-exer-list="{{exer_list}}"></div>
+    <div id="count_container">
+        <div id="count_text">Count:</div>
+        <!-- This element should be dynamic. -->
+        <div id="count_value">0</div>
+    </div>
+    <div id="exercise_backdrop">
+    </div>
+    <div id="info_container">
+        <div id="info_label_container">
+            <div id="exer_label">Current Exercise:</div>
+            <div id="rep_label">Repetition #:</div>
+        </div>
+        <div id="info_value_container">
+            <div id="exer_value"></div>
+            <div id="rep_value"></div>
+        </div>
+    </div>
+    <div id="video_container">
+        <video id="webcam-element" autoplay></video>
+    </div>
+</div>
+<div id="exercise_cooldown_container">
+    
+</div>
+<!-- Thanks to ChatGPT for this feature. -->
+<script type="text/javascript" src="/static/javascript/exercise_page.js"></script>
+{% endblock %}

@@ -1,0 +1,177 @@
+@keyframes anim_routine_option_focus {
+    0% {
+        border-radius: 0px;
+        border-style: none;
+        border-color: white;
+    };
+    100% {
+        border-radius: 5px;
+        border-style: inset;
+        border-color: white;
+    };
+}
+
+#page_flavor_text {
+    font-size: 275%;
+    font-family: "Serif", "Times New Roman", "Arial";
+    color: #310064;
+    text-align: center;
+
+    background-color: #ffffff;
+    border-radius: 5%;
+    
+    margin-left: 67.5%;
+    margin-top: 2%;
+    width: 30%;
+}
+
+#routine_start {
+    position: sticky;
+
+    font-size: 275%;
+    font-family: "Serif", "Times New Roman", "Arial";
+    color: #ffffff;
+    background-color: #400070;
+    text-align: center;
+    
+    height: auto;
+    width: 28%;
+    
+    margin-left: 80.4%;
+    margin-top: 14%;
+    transform: rotate(-90deg);
+}
+
+.routine_container {
+    margin-left: 27vw;
+    margin-right: 15vw;
+    margin-bottom: 2vh;
+    top: -30vh;
+
+    position: relative;
+    width: 58vw;
+    height: 32vh;
+}
+
+.routine_option {
+    --right-elem-width: 93.6%;
+    --right-elem-mg_left: 6.2%;
+    --override-cursor: crosshair;
+
+    position: relative;
+    width: 100%;
+    height: 32vh;
+    margin-bottom: 3%;
+    :active, :focus {
+        border-radius: 5px;
+        border-style: inset;
+        border-color: white;
+    };
+    :active {
+        animation-name: anim_routine_option_focus;
+        animation-duration: 0.35s;
+    }
+    [class="btn btn-light"] {
+        position: inherit;
+        width: 100%;
+        height: 100%;
+    
+        background-image: url("/static/routine_widget.png");
+        background-size: 100% 100%;
+    };
+    .routine_text {
+        font-size: 3.92vh;
+        font-family: "Serif", "Times New Roman", "Arial";
+        text-align: center;
+        color: white;
+
+        width: 30.4%;
+        height: fit-content;
+
+        position: relative;
+        top: -58.8%;
+        left: -12%;
+        transform: rotate(-90deg);
+
+        pointer-events: none;
+    };
+    .routine_img_cabaret {
+        position: relative;
+        width: var(--right-elem-width);
+        height: 66.4%;
+    
+        margin-left: var(--right-elem-mg_left);
+        margin-top: -38.8%;
+
+        pointer-events: none;
+        .routine_img_container {
+            --text-size: 70%;
+            position: relative;
+
+            margin-left: 11%;
+            margin-right: 9%;
+            margin-top: 2.8%;
+
+            width: 12%;
+            height: 76%;
+
+            display: inline-block;
+
+            border: #606060;
+            border-style: groove;
+            border-radius: 0.5px;
+
+            .routine_img {
+                --rel-width: 70%;
+                --rel-height: 50%;
+
+                position: relative;
+
+                width: var(--rel-width);
+                height: 52%;
+
+                /* background-color: yellowgreen; */
+                background-size: 100% 100%;
+                margin-left: calc(calc(100% - var(--rel-width)) * 0.5);
+                margin-top: calc(calc(100% - var(--rel-height)) * 0.15625);
+            }
+            .routine_reps, .routine_sets {
+                font-size: var(--text-size);
+                width: 100%;
+                color: black;
+                text-align: center;
+                position: relative;
+            }
+        }
+    };
+    .routine_desc_container {
+        width: var(--right-elem-width);
+        height: 33.6%;
+    
+        position: relative;        
+        top: -0.6%;
+
+        margin-left: var(--right-elem-mg_left);
+        padding: 1.2%;
+    
+        display: inline-block;
+        pointer-events: none;
+        .routine_label, .routine_content {
+            font-size: 75%;
+            font-family: "Serif", "Times New Roman", "Arial";    
+            color: black;
+
+            position: relative;
+            text-align: center;
+        }
+        .routine_label {
+            width: 10%;
+            top: 0%;
+        }
+        .routine_content {
+            width: 85%;
+            top: -30%;
+            left: 10%;
+        }
+    };
+}

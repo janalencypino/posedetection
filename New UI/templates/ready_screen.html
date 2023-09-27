@@ -1,0 +1,15 @@
+{% extends "fitquest_template.html" %}
+{% block title %}
+    FitQuest: Ready in {{timeout}}
+{% endblock %}
+{% block header_data %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ready_screen.css') }}">
+{% endblock %}
+{% block content %}
+<span id="page_data" hidden="hidden" data-id={{index}}></span>
+<div id="ready_text">
+    Ready in
+</div>
+<div id="countdown_text">{{timeout}}</div>
+<script type="text/javascript" src="/static/javascript/ready_screen.js"></script>
+{% endblock %}
