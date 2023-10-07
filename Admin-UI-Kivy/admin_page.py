@@ -99,6 +99,19 @@ class JSONEditor(BoxLayout):
         # Save the updated data back to the JSON file
         with open("exercises.json", "w") as json_file:
             json.dump(self.data, json_file, indent=4)  # Optionally, use 'indent' for pretty formatting
+    
+    def delete_exercise(self, instance):
+        exercise_name_to_delete = self.exercise_name.text
+        # Loop through the existing exercises and find the one to delete
+        for exercise in self.exercises:
+            if exercise["name"] == exercise_name_to_delete:
+                self.exercises.remove(exercise)
+                break  # Stop searching after the first match
+
+        # Save the updated exercise data to the JSON file
+        with open("exercises.json", "w") as json_file:
+            json.dump(self.exercises, json_file, indent=4)
+            
 '''
 
 class MyApp(App):
