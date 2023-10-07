@@ -1,9 +1,8 @@
-# Import the necessary Kivy modules
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
 import json
 
 class ExerciseApp(App):
@@ -54,7 +53,18 @@ class ExerciseScreen(BoxLayout):
         button_layout.add_widget(cancel_button)
         
         self.add_widget(button_layout)
-    
+
+        # Load existing JSON data from the file
+        self.load_data()
+
+    def load_data(self):
+        try:
+            # Read existing JSON data from a file (e.g., "exercises.json")
+            with open("exercises.json", "r") as json_file:
+                self.exercises = json.load(json_file)
+        except FileNotFoundError:
+            self.exercises = []  # If the file doesn't exist, initialize with an empty list
+
     def add_exercise(self, instance):
         exercise_name = self.exercise_name.text
         exercise_description = self.exercise_description.text
@@ -64,7 +74,6 @@ class ExerciseScreen(BoxLayout):
         angle1 = self.angle1.text
         angle2 = self.angle2.text
 
-        
         # Validate input here if needed
         
         exercise_data = {
@@ -76,11 +85,14 @@ class ExerciseScreen(BoxLayout):
             "angle1": angle1,
             "angle2": angle2
         }
-        
-        # Save exercise data to a JSON file
-        with open("exercises.json", "a") as json_file:
-            json.dump(exercise_data, json_file)
-        
+
+        # Append the new exercise data to the existing exercises list
+        self.exercises.append(exercise_data)
+
+        # Save the updated exercise data to the JSON file
+        with open("exercises.json", "w") as json_file:
+            json.dump(self.exercises, json_file, indent=4)
+
         # Optionally, clear the input fields
         self.exercise_name.text = ''
         self.exercise_description.text = ''
@@ -89,7 +101,7 @@ class ExerciseScreen(BoxLayout):
         self.bodypart3.text = ''
         self.angle1.text = ''
         self.angle2.text = ''
-    
+
     def cancel_adding(self, instance):
         # Close the screen or popup without saving data
         pass
