@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Bicep Curl Up",
+        "description": " A strength training movement that involves flexing the elbow to lift a weight, primarily targeting the biceps muscle.",
+        "bodypart1": "shoulder",
+        "bodypart2": "elbow",
+        "bodypart3": "wrist",
+        "angle1": "160",
+        "angle2": "30"
+    },
+    {
+        "name": "Squats",
+        "description": "A lower body exercise where you bend your knees and hips to lower your body toward the ground, working the quadriceps, hamstrings, and glutes.",
+        "bodypart1": "hip",
+        "bodypart2": "knee",
+        "bodypart3": "ankle",
+        "angle1": "90",
+        "angle2": "160"
+    }
+]
