@@ -50,6 +50,57 @@ class AdminDashboard(Screen):
         self.add_widget(Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False))
         self.add_widget(Label(text="Admin Dashboard"))
 
+'''
+class JSONEditorApp(App):
+    def build(self):
+        self.title = 'JSON Editor'
+        self.root = JSONEditor()
+        return self.root
+
+class JSONEditor(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
+        # Load JSON data from the file
+        self.load_data()
+
+        # Text input for editing JSON data
+        self.json_input = TextInput(text=json.dumps(self.data, indent=4))
+        self.add_widget(self.json_input)
+
+        # Buttons for editing and saving
+        edit_button = Button(text='Edit Data')
+        save_button = Button(text='Save Data')
+
+        edit_button.bind(on_release=self.edit_data)
+        save_button.bind(on_release=self.save_data)
+
+        self.add_widget(edit_button)
+        self.add_widget(save_button)
+
+    def load_data(self):
+        try:
+            # Read JSON data from a file (assuming the file is named "data.json")
+            with open("exercises.json", "r") as json_file:
+                self.data = json.load(json_file)
+        except FileNotFoundError:
+            self.data = {}  # If the file doesn't exist, initialize with an empty dictionary
+
+    def edit_data(self, instance):
+        # Parse the JSON data from the input field
+        try:
+            edited_data = json.loads(self.json_input.text)
+            self.data = edited_data  # Update the data with the edited content
+        except json.JSONDecodeError:
+            pass  # Handle invalid JSON input here if needed
+
+    def save_data(self, instance):
+        # Save the updated data back to the JSON file
+        with open("exercises.json", "w") as json_file:
+            json.dump(self.data, json_file, indent=4)  # Optionally, use 'indent' for pretty formatting
+'''
+
 class MyApp(App):
     def build(self):
         sm = ScreenManager()
