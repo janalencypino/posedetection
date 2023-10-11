@@ -19,7 +19,7 @@ class MainScreen(Screen):
         layout.add_widget(bg)
         
         # Logo
-        logo = Image(source='static/logo-no-background.png', pos_hint={'x': 0.5, 'y': 0.5}, size_hint=(0.3, 0.3), allow_stretch=True, keep_ratio=True)
+        logo = Image(source='static/logo-no-background.png', pos_hint={'center_x': 0.5, 'center_y': 0.8}, size_hint=(0.3, 0.3), allow_stretch=True, keep_ratio=True)
         layout.add_widget(logo)
         
         # Buttons layout
@@ -44,13 +44,14 @@ class MainScreen(Screen):
     def admin_btn_pressed(self, instance):
         self.manager.current = 'admin_dashboard'
 
+
 class AdminDashboard(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.add_widget(Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False))
         self.add_widget(Label(text="Admin Dashboard"))
 
-'''
+
 class JSONEditorApp(App):
     def build(self):
         self.title = 'JSON Editor'
@@ -112,7 +113,33 @@ class JSONEditor(BoxLayout):
         with open("exercises.json", "w") as json_file:
             json.dump(self.exercises, json_file, indent=4)
             
-'''
+
+class AdminDashboard(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        # Main layout
+        layout = FloatLayout(size=(300, 300))
+        
+        # Background
+        bg = Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False)
+        layout.add_widget(bg)
+        
+        # Label
+        label = Label(text="Admin Dashboard", pos_hint={'center_x': 0.5, 'center_y': 0.7})
+        layout.add_widget(label)
+        
+        # Back Button
+        back_btn = Button(text="Back", size_hint=(None, None), size=(100, 50), pos_hint={'right': 1, 'y': 0})
+        back_btn.bind(on_press=self.back_btn_pressed)
+        layout.add_widget(back_btn)
+        
+        # Add layout to screen
+        self.add_widget(layout)
+
+    def back_btn_pressed(self, instance):
+        self.manager.current = 'main_screen'
+
 
 class MyApp(App):
     def build(self):

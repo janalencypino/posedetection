@@ -8,12 +8,22 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.spinner import Spinner
+from kivy.uix.image import Image
+
 
 class Form(BoxLayout):
     def __init__(self, **kwargs):
         super(Form, self).__init__(**kwargs)
         self.orientation = "vertical"
         self.data = {}  # Dictionary to store user inputs
+
+        # Main Content Layout
+        self.content_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        self.add_widget(self.content_layout)
+
+        # Background Image
+        self.bg_image = Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False)
+        self.add_widget(self.bg_image)
 
         # Routine Name input
         self.routine_name = TextInput(hint_text='Routine Name')
