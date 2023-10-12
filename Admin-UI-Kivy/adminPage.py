@@ -115,15 +115,6 @@ class JSONEditor(BoxLayout):
         with open("exercises.json", "w") as json_file:
             json.dump(self.exercises, json_file, indent=4)
             
-
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.image import Image
-from kivy.uix.screenmanager import Screen
-from kivy.uix.floatlayout import FloatLayout
-
 class AdminDashboard(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
