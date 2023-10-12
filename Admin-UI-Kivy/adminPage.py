@@ -6,6 +6,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.audio import SoundLoader
+from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
@@ -19,7 +21,7 @@ class MainScreen(Screen):
         layout.add_widget(bg)
         
         # Logo
-        logo = Image(source='static/logo-no-background.png', pos_hint={'x': 0.5, 'y': 0.5}, size_hint=(0.3, 0.3), allow_stretch=True, keep_ratio=True)
+        logo = Image(source='static/logo-no-background.png', pos_hint={'center_x': 0.5, 'center_y': 0.8}, size_hint=(0.3, 0.3), allow_stretch=True, keep_ratio=True)
         layout.add_widget(logo)
         
         # Buttons layout
@@ -44,13 +46,14 @@ class MainScreen(Screen):
     def admin_btn_pressed(self, instance):
         self.manager.current = 'admin_dashboard'
 
+
 class AdminDashboard(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.add_widget(Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False))
         self.add_widget(Label(text="Admin Dashboard"))
 
-'''
+
 class JSONEditorApp(App):
     def build(self):
         self.title = 'JSON Editor'
@@ -112,8 +115,48 @@ class JSONEditor(BoxLayout):
         with open("exercises.json", "w") as json_file:
             json.dump(self.exercises, json_file, indent=4)
             
-'''
 
+class AdminDashboard(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        # Main layout
+        layout = FloatLayout(size=(300, 300))
+        
+        # Background
+        bg = Image(source='static/fitquest_bg_logo.png', allow_stretch=True, keep_ratio=False)
+        layout.add_widget(bg)
+        
+        # Tabbed Panel
+        tab_panel = TabbedPanel(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.8, 0.6), do_default_tab=False, tab_width=200)
+        
+        # Tab 1: Manage Exercises
+        tab1 = TabbedPanelItem(text='Manage Exercises')
+        tab1.font_size = 14  # Adjust font size as needed
+        tab1_content = Label(text='Here you can manage exercises.')  # Replace with your content
+        tab1.add_widget(tab1_content)
+        tab_panel.add_widget(tab1)
+        
+        # Tab 2: Manage Ready Made Routine
+        tab2 = TabbedPanelItem(text='Manage Ready Made Routine')
+        tab2.font_size = 14  # Adjust font size as needed
+        tab2_content = Label(text='Here you can manage ready made routines.')  # Replace with your content
+        tab2.add_widget(tab2_content)
+        tab_panel.add_widget(tab2)
+        
+        layout.add_widget(tab_panel)
+        
+        # Back Button
+        back_btn = Button(text="Back", size_hint=(None, None), size=(100, 50), pos_hint={'right': 1, 'y': 0})
+        back_btn.bind(on_press=self.back_btn_pressed)
+        layout.add_widget(back_btn)
+        
+        # Add layout to screen
+        self.add_widget(layout)
+
+    def back_btn_pressed(self, instance):
+        self.manager.current = 'main_screen'
+        
 class MyApp(App):
     def build(self):
         sm = ScreenManager()
@@ -124,7 +167,7 @@ class MyApp(App):
         self.sound = SoundLoader.load('audio/bss_fighting.mp3')  # Replace with your audio file
         if self.sound:
             self.sound.loop = True  # Enable looping
-            self.sound.volume = 0.5  # Set volume to 50%
+            self.sound.volume = 0.4  # Set volume to 50%
             self.sound.play()
         else:
             print("Unable to load the sound")
