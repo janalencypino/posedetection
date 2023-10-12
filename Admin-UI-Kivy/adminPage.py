@@ -116,6 +116,14 @@ class JSONEditor(BoxLayout):
             json.dump(self.exercises, json_file, indent=4)
             
 
+from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.screenmanager import Screen
+from kivy.uix.floatlayout import FloatLayout
+
 class AdminDashboard(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -133,7 +141,33 @@ class AdminDashboard(Screen):
         # Tab 1: Manage Exercises
         tab1 = TabbedPanelItem(text='Manage Exercises')
         tab1.font_size = 14  # Adjust font size as needed
-        tab1_content = Label(text='Here you can manage exercises.')  # Replace with your content
+        
+        # Content of Tab 1
+        tab1_content = BoxLayout(orientation='vertical')
+        
+        # Button to add new exercise
+        add_exercise_btn = Button(text='Add New Exercise', size_hint_y=None, height=30)
+        tab1_content.add_widget(add_exercise_btn)
+        
+        # Table (using GridLayout)
+        table = GridLayout(cols=3, row_force_default=True, row_default_height=30, spacing=[0,5])
+        headers = ["", "Name of Exercise", "Description", ""]
+        for header in headers:
+            table.add_widget(Label(text=header))
+        
+        # Example data
+        exercises = [
+            ["Push Up", "3", "10", ""],
+            ["Squat", "4", "15", ""],
+            ["Pull Up", "2", "8", ""]
+        ]
+        
+        for exercise in exercises:
+            for data in exercise:
+                table.add_widget(Label(text=data))
+        
+        tab1_content.add_widget(table)
+        
         tab1.add_widget(tab1_content)
         tab_panel.add_widget(tab1)
         
@@ -156,6 +190,7 @@ class AdminDashboard(Screen):
 
     def back_btn_pressed(self, instance):
         self.manager.current = 'main_screen'
+
         
 class MyApp(App):
     def build(self):
