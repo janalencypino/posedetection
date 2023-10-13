@@ -2,8 +2,9 @@ from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, NoTransition
 from kivy.uix.layout import Layout
+from typing import Callable
 
 import kivy_config as cfg
 
@@ -14,6 +15,9 @@ class HomePage(App):
     def index_to_screen(index: int):
         return 'screen_' + str(index)
 
+    def screen_to_index(scr_text: str) -> int:
+        return int(scr_text[7:])
+    
     def get_manager():
         return HomePage._manager
     
@@ -24,8 +28,10 @@ class HomePage(App):
         Window.left     = 128
         return HomePage._manager
     
-    def new_back_button(manager: ScreenManager, return_index: int):
-        back_button             = Button(
+    def new_trans_button(manager: ScreenManager, return_index: int,
+                         do_transition: bool = True, callback: Callable[[None], None] = None,
+                         back_button: Button = None):
+        back_button             = ((not (back_button is None)) and back_button) or Button(
             text                = cfg.back_button_params['text'],
             size_hint           = cfg.back_button_params['size_hint'],
             pos_hint            = cfg.back_button_params['pos_hint'],
@@ -42,11 +48,21 @@ class HomePage(App):
             back_button.font_size   = 0.24*size[0]
 
         def on_back_button_return(back_button):
+            cur_index   = HomePage.screen_to_index(manager.current)
             if (return_index < 3):
-                app_data['user_id']     = None
+                app_data['user_id'] = None
  
-            manager.transition      = SlideTransition(direction="right")
+            # We're going back.
+            if (not do_transition):
+                manager.transition      = NoTransition()
+            elif (return_index < cur_index):
+                manager.transition      = SlideTransition(direction="right")
+            else:
+                manager.transition      = SlideTransition(direction="left")
+
             manager.current         = HomePage.index_to_screen(return_index)
+            if (not (callback is None)):
+                callback()
 
         back_button.bind(size=on_back_button_resize)
         back_button.bind(on_release=on_back_button_return)
@@ -91,7 +107,11 @@ def add_screen_page(manager: ScreenManager,
     return screen
 
 def render_app(app: App):
-    # HomePage.get_manager().current  = HomePage.index_to_screen(1)
+    import load_default_exercises as load_exer
+    import kivy_ready_made_routine as kv_routine
+    kv_routine.load_exercises(load_exer.default_exer_list(),
+                              load_exer.default_exer_desc())
+    # HomePage.get_manager().current  = HomePage.index_to_screen(7)
     app.run()
 
 def prep_pages():
@@ -101,6 +121,7 @@ def prep_pages():
     import kivy_custom_routine
     import kivy_exercise_countdown
     import kivy_exercise_page
+    import exercise_class
 
     app     = HomePage(title="FitQuest")
     manager = HomePage._manager
@@ -137,8 +158,8 @@ def prep_pages():
     return app
 
 def preload_exercises():
-    import load_default_exercises
-    load_default_exercises.populate_exercises()
+    import load_default_exercises as load_exer
+    load_exer.populate_exercises()
 
 if __name__ == '__main__':
     preload_exercises()
