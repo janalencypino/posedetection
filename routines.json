@@ -1,22 +1,22 @@
 [
     {
-        "routine_name": "Core",
-        "routine_description": "To strengthen one's core.",
+        "routine_name": "",
+        "routine_description": "",
         "exercises": [
             {
                 "name": "Push-ups",
-                "sets": "20",
-                "counts": "2"
+                "sets": "",
+                "counts": ""
             },
             {
-                "name": "Sit-ups",
-                "sets": "20",
-                "counts": "2"
+                "name": "Squats",
+                "sets": "",
+                "counts": ""
             },
             {
-                "name": "Lunges",
-                "sets": "20",
-                "counts": "2"
+                "name": "Bicep Curl Ups",
+                "sets": "",
+                "counts": ""
             }
         ]
     }
