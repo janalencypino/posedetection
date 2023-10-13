@@ -3,10 +3,13 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.audio import SoundLoader
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+import json
+from kivy.uix.gridlayout import GridLayout
 
 
 class MainScreen(Screen):
