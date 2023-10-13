@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivy.graphics import Color, RoundedRectangle
+from typing import Callable
 
 import kivy_homepage as home
 import kivy_config as cfg
@@ -226,6 +227,9 @@ def info_recipe(manager: ScreenManager):
     info_layout.add_widget(label_layout)
     return info_layout
 
+def camera_recipe(manager: ScreenManager):
+    pass
+
 def add_layout_widget(app_layout, widget):
     _app_layout_elements.append(widget)
     app_layout.add_widget(widget)
@@ -238,6 +242,7 @@ def page_recipe(manager: ScreenManager):
     add_layout_widget(app_layout, counter_recipe(manager))
     add_layout_widget(app_layout, exercise_recipe(manager))
     add_layout_widget(app_layout, info_recipe(manager))
+    # add_layout_widget(app_layout, camera_recipe(manager))
 
     return app_layout
 
@@ -321,3 +326,11 @@ class ExercisePage:
         app_layout          = _app_layout_elements[2]
         app_widget          = app_layout.children[0]
         app_widget.source   = new_src
+
+
+    _subscriber_fun         = []
+    def add_subscriber(fun: Callable[[None], None]):
+        if (fun is None):
+            return
+        
+        ExercisePage._subscriber_fun.append(fun)
