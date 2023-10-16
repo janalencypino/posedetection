@@ -3,7 +3,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.uix.filechooser import FileChooserListView
 import json
+import os
+import base64
 
 class AdminAddExercise(Screen):
     def __init__(self, **kwargs):
@@ -35,17 +38,25 @@ class AdminAddExercise(Screen):
         self.angle2 = TextInput(hint_text='Joint Angles 2')
         self.layout.add_widget(self.angle2)
 
+        # Add Image Uploader
+        self.file_chooser = FileChooserListView()
+        self.file_chooser.multiselect = True  # Enable multiple file selection
+        self.layout.add_widget(self.file_chooser)
+
         # Add and Cancel buttons
         button_layout = BoxLayout(orientation='horizontal')
         add_button = Button(text='Add Exercise')
         cancel_button = Button(text='Cancel')
+        upload_button = Button(text='Upload Images')
         
         add_button.bind(on_release=self.add_exercise)
         cancel_button.bind(on_release=self.cancel_adding)
+        upload_button.bind(on_release=self.upload_images)
         
         button_layout.add_widget(add_button)
         button_layout.add_widget(cancel_button)
-        
+        button_layout.add_widget(upload_button)
+
         self.layout.add_widget(button_layout)
 
         # Attach the main layout to this screen
@@ -75,6 +86,19 @@ class AdminAddExercise(Screen):
 
         # Validate input here if needed
         
+        image_info_list = []
+        if self.file_chooser.selection:
+            for file_path in self.file_chooser.selection:
+                with open(file_path, 'rb') as img_file:
+                    image_data = img_file.read()
+                image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+                image_info = {
+                    'filename': os.path.basename(file_path),  # Store only the file name, not the path
+                    'image_data': image_base64
+                }
+                image_info_list.append(image_info)
+
         exercise_data = {
             "name": exercise_name,
             "description": exercise_description,
@@ -82,7 +106,8 @@ class AdminAddExercise(Screen):
             "bodypart2": bodypart2,
             "bodypart3": bodypart3,
             "angle1": angle1,
-            "angle2": angle2
+            "angle2": angle2,
+            "images": image_info_list
         }
 
         # Append the new exercise data to the existing exercises list
@@ -100,7 +125,42 @@ class AdminAddExercise(Screen):
         self.bodypart3.text = ''
         self.angle1.text = ''
         self.angle2.text = ''
+        self.file_chooser.selection = []
 
     def cancel_adding(self, instance):
         # Close the screen or popup without saving data
         pass
+
+    def upload_images(self, instance):
+        if self.file_chooser.selection:
+            selected_files = self.file_chooser.selection
+
+            image_info_list = []
+
+            # Load existing image info from the JSON file if it exists
+            if os.path.exists('image_info.json'):
+                with open('image_info.json', 'r') as json_file:
+                    image_info_list = json.load(json_file)
+
+            for file_path in selected_files:
+                # Read each image file as binary data
+                with open(file_path, 'rb') as img_file:
+                    image_data = img_file.read()
+
+                # Convert the binary image data to base64
+                image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+                # Create a dictionary for each image
+                image_info = {
+                    'filename': file_path,
+                    'image_data': image_base64
+                }
+
+                image_info_list.append(image_info)
+
+            # Save the updated list of image info to the JSON file
+            with open('image_info.json', 'w') as json_file:
+                json.dump(image_info_list, json_file, indent=4)
+
+            # Optionally, clear the selection in the file chooser
+            self.file_chooser.selection = []
