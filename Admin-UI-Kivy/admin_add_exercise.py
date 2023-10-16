@@ -1,45 +1,39 @@
-from kivy.app import App
+from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 import json
 
-class ExerciseApp(App):
-    def build(self):
-        self.title = 'Exercise App'
-        self.root = ExerciseScreen()
-        return self.root
-
-class ExerciseScreen(BoxLayout):
+class AdminAddExercise(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = 'vertical'
+        self.layout = BoxLayout(orientation='vertical')  # Main layout
         
         # Exercise Name input
         self.exercise_name = TextInput(hint_text='Exercise Name')
-        self.add_widget(self.exercise_name)
+        self.layout.add_widget(self.exercise_name)
         
         # Exercise Description input
         self.exercise_description = TextInput(hint_text='Exercise Description')
-        self.add_widget(self.exercise_description)
+        self.layout.add_widget(self.exercise_description)
         
-         # Body Parts input
+        # Body Parts input
         self.bodypart1 = TextInput(hint_text='Body Part 1')
-        self.add_widget(self.bodypart1)
+        self.layout.add_widget(self.bodypart1)
 
         self.bodypart2 = TextInput(hint_text='Body Part 2')
-        self.add_widget(self.bodypart2)
+        self.layout.add_widget(self.bodypart2)
 
         self.bodypart3 = TextInput(hint_text='Body Part 3')
-        self.add_widget(self.bodypart3)
+        self.layout.add_widget(self.bodypart3)
 
         # Joint Angles input
         self.angle1 = TextInput(hint_text='Joint Angles 1')
-        self.add_widget(self.angle1)
+        self.layout.add_widget(self.angle1)
         
         self.angle2 = TextInput(hint_text='Joint Angles 2')
-        self.add_widget(self.angle2)
+        self.layout.add_widget(self.angle2)
 
         # Add and Cancel buttons
         button_layout = BoxLayout(orientation='horizontal')
@@ -52,10 +46,15 @@ class ExerciseScreen(BoxLayout):
         button_layout.add_widget(add_button)
         button_layout.add_widget(cancel_button)
         
-        self.add_widget(button_layout)
+        self.layout.add_widget(button_layout)
+
+        # Attach the main layout to this screen
+        self.add_widget(self.layout)
 
         # Load existing JSON data from the file
         self.load_data()
+
+    # ... keep all your other methods (load_data, add_exercise, cancel_adding) unchanged ...
 
     def load_data(self):
         try:
@@ -105,6 +104,3 @@ class ExerciseScreen(BoxLayout):
     def cancel_adding(self, instance):
         # Close the screen or popup without saving data
         pass
-
-if __name__ == '__main__':
-    ExerciseApp().run()

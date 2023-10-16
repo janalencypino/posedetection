@@ -10,7 +10,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 import json
 from kivy.uix.gridlayout import GridLayout
-
+from admin_add_exercise import AdminAddExercise
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
@@ -57,66 +57,66 @@ class AdminDashboard(Screen):
         self.add_widget(Label(text="Admin Dashboard"))
 
 
-class JSONEditorApp(App):
-    def build(self):
-        self.title = 'JSON Editor'
-        self.root = JSONEditor()
-        return self.root
+# class JSONEditorApp(App):
+#     def build(self):
+#         self.title = 'JSON Editor'
+#         self.root = JSONEditor()
+#         return self.root
 
-class JSONEditor(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'vertical'
+# class JSONEditor(BoxLayout):
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#         self.orientation = 'vertical'
 
-        # Load JSON data from the file
-        self.load_data()
+#         # Load JSON data from the file
+#         self.load_data()
 
-        # Text input for editing JSON data
-        self.json_input = TextInput(text=json.dumps(self.data, indent=4))
-        self.add_widget(self.json_input)
+#         # Text input for editing JSON data
+#         self.json_input = TextInput(text=json.dumps(self.data, indent=4))
+#         self.add_widget(self.json_input)
 
-        # Buttons for editing and saving
-        edit_button = Button(text='Edit Data')
-        save_button = Button(text='Save Data')
+#         # Buttons for editing and saving
+#         edit_button = Button(text='Edit Data')
+#         save_button = Button(text='Save Data')
 
-        edit_button.bind(on_release=self.edit_data)
-        save_button.bind(on_release=self.save_data)
+#         edit_button.bind(on_release=self.edit_data)
+#         save_button.bind(on_release=self.save_data)
 
-        self.add_widget(edit_button)
-        self.add_widget(save_button)
+#         self.add_widget(edit_button)
+#         self.add_widget(save_button)
 
-    def load_data(self):
-        try:
-            # Read JSON data from a file (assuming the file is named "data.json")
-            with open("exercises.json", "r") as json_file:
-                self.data = json.load(json_file)
-        except FileNotFoundError:
-            self.data = {}  # If the file doesn't exist, initialize with an empty dictionary
+#     def load_data(self):
+#         try:
+#             # Read JSON data from a file (assuming the file is named "data.json")
+#             with open("exercises.json", "r") as json_file:
+#                 self.data = json.load(json_file)
+#         except FileNotFoundError:
+#             self.data = {}  # If the file doesn't exist, initialize with an empty dictionary
 
-    def edit_data(self, instance):
-        # Parse the JSON data from the input field
-        try:
-            edited_data = json.loads(self.json_input.text)
-            self.data = edited_data  # Update the data with the edited content
-        except json.JSONDecodeError:
-            pass  # Handle invalid JSON input here if needed
+#     def edit_data(self, instance):
+#         # Parse the JSON data from the input field
+#         try:
+#             edited_data = json.loads(self.json_input.text)
+#             self.data = edited_data  # Update the data with the edited content
+#         except json.JSONDecodeError:
+#             pass  # Handle invalid JSON input here if needed
 
-    def save_data(self, instance):
-        # Save the updated data back to the JSON file
-        with open("exercises.json", "w") as json_file:
-            json.dump(self.data, json_file, indent=4)  # Optionally, use 'indent' for pretty formatting
+#     def save_data(self, instance):
+#         # Save the updated data back to the JSON file
+#         with open("exercises.json", "w") as json_file:
+#             json.dump(self.data, json_file, indent=4)  # Optionally, use 'indent' for pretty formatting
     
-    def delete_exercise(self, instance):
-        exercise_name_to_delete = self.exercise_name.text
-        # Loop through the existing exercises and find the one to delete
-        for exercise in self.exercises:
-            if exercise["name"] == exercise_name_to_delete:
-                self.exercises.remove(exercise)
-                break  # Stop searching after the first match
+#     def delete_exercise(self, instance):
+#         exercise_name_to_delete = self.exercise_name.text
+#         # Loop through the existing exercises and find the one to delete
+#         for exercise in self.exercises:
+#             if exercise["name"] == exercise_name_to_delete:
+#                 self.exercises.remove(exercise)
+#                 break  # Stop searching after the first match
 
-        # Save the updated exercise data to the JSON file
-        with open("exercises.json", "w") as json_file:
-            json.dump(self.exercises, json_file, indent=4)
+#         # Save the updated exercise data to the JSON file
+#         with open("exercises.json", "w") as json_file:
+#             json.dump(self.exercises, json_file, indent=4)
             
 class AdminDashboard(Screen):
     def __init__(self, **kwargs):
@@ -141,6 +141,7 @@ class AdminDashboard(Screen):
         
         # Button to add new exercise
         add_exercise_btn = Button(text='Add New Exercise', size_hint_y=None, height=30)
+        add_exercise_btn.bind(on_release=self.navigate_to_add_exercise)  # Binding to the new method
         tab1_content.add_widget(add_exercise_btn)
         
         # Table (using GridLayout)
@@ -182,6 +183,11 @@ class AdminDashboard(Screen):
         # Add layout to screen
         self.add_widget(layout)
 
+     # New method to handle navigation
+    def navigate_to_add_exercise(self, instance):
+        self.manager.transition.direction = 'left'  # Optional: change the direction of the screen transition
+        self.manager.current = 'admin_add_exercise'  # This refers to the name given to the screen when added to ScreenManager    
+
     def back_btn_pressed(self, instance):
         self.manager.current = 'main_screen'
 
@@ -191,6 +197,7 @@ class MyApp(App):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main_screen'))
         sm.add_widget(AdminDashboard(name='admin_dashboard'))
+        sm.add_widget(AdminAddExercise(name='admin_add_exercise'))
         
         # Load and play background music
         self.sound = SoundLoader.load('audio/bss_fighting.mp3')  # Replace with your audio file

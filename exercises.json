@@ -16,5 +16,14 @@
         "bodypart3": "ankle",
         "angle1": "90",
         "angle2": "160"
+    },
+    {
+        "name": "",
+        "description": "",
+        "bodypart1": "",
+        "bodypart2": "",
+        "bodypart3": "",
+        "angle1": "",
+        "angle2": ""
     }
 ]
