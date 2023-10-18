@@ -30,10 +30,12 @@ def page_recipe(manager: ScreenManager):
 
     def get_button_release_func():
         def premade_fun():
-            manager.current = home.HomePage.index_to_screen(4)
+            manager.transition  = SlideTransition(direction="left")
+            manager.current     = home.HomePage.index_to_screen(4)
 
         def custom_fun():
-            manager.current = home.HomePage.index_to_screen(5)
+            manager.transition  = SlideTransition(direction="left")
+            manager.current     = home.HomePage.index_to_screen(5)
 
         return [premade_fun, custom_fun]
 
@@ -65,7 +67,7 @@ def page_recipe(manager: ScreenManager):
         button_event_factory(button, btn_resp_list[i])
         button_layout.add_widget(button)
 
-    back_button             = home.HomePage.new_back_button(manager, 2)
+    back_button             = home.HomePage.new_trans_button(manager, 2)
 
     app_layout.add_widget(app_bg)
     app_layout.add_widget(label)

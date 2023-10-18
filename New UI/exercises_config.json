@@ -2,21 +2,43 @@
     "jumping_jacks": {
         "reps": 20,
         "sets": 2,
+        "duration": 40,
         "img_path": "static/exercises/exercise_jumping_jacks.png"
     },
     "lunges": {
         "reps": 30,
         "sets": 2,
+        "duration": 60,
         "img_path": "static/exercises/exercise_lunges.png"
     },
     "sit_ups": {
         "reps": 20,
         "sets": 2,
+        "duration": 30,
         "img_path": "static/exercises/exercise_sit_ups.png"
     },
     "push_ups": {
         "reps": 20,
         "sets": 1,
+        "duration": 60,
         "img_path": "static/exercises/exercise_push_ups.png"
+    },
+    "plank": {
+        "reps": 10,
+        "sets": 1,
+        "duration": 20,
+        "img_path": "static/exercises/exercise_plank.png"
+    },
+    "bicep_curl_up": {
+        "reps": 30,
+        "sets": 1,
+        "duration": 90,
+        "img_path": "static/exercises/exercise_bicep_curl_up.png"
+    },
+    "high_knees": {
+        "reps": 15,
+        "sets": 3,
+        "duration": 60,
+        "img_path": "static/exercises/exercise_high_knees.png"
     }
 }

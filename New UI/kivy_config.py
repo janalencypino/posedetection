@@ -15,3 +15,5 @@ back_button_params  = {
     'size_hint'     : [0.18, 0.12],
     'pos_hint'      : {'x': 0.05, 'center_y': 0.12},
 }
+
+strict_mode         = True

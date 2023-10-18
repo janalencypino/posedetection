@@ -87,7 +87,7 @@ def page_recipe(manager: ScreenManager):
         font_name   = cfg.font_name,
     )
 
-    back_button             = home.HomePage.new_back_button(manager, 1)
+    back_button     = home.HomePage.new_trans_button(manager, 1)
     
     #   ===============================
     #       Label definition

@@ -1,24 +1,36 @@
 from kivy.uix.image import Image
+from kivy.uix.layout import Layout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
+from kivy.uix.camera import Camera
+from kivy.uix.widget import Widget
+from kivy.clock import Clock
 from kivy.graphics import Color, RoundedRectangle
 from typing import Callable
+from exercise_class import Exercise
+from pose_detection.return_code import ReturnCode
 
 import kivy_homepage as home
 import kivy_config as cfg
+import cv2
+import numpy as np
 
 #   ==================================
 #       Configurable parameters
 #   ==================================
 inlet_widget_rel_size   = 0.96
+tick_rate               = 1.0 / 10.0
 
 #   ==================================
 #       Private variables
 #   ==================================
+_app_layout             = None
 _app_layout_elements    = []
+_manager                = None
+on_page_unload          = None
 
 def counter_recipe(manager: ScreenManager):
     counter_layout      = FloatLayout(
@@ -127,7 +139,7 @@ def exercise_recipe(manager: ScreenManager):
 def info_recipe(manager: ScreenManager):
     info_layout         = FloatLayout(
         size_hint       = [0.32, 0.28],
-        pos_hint        = {'center_x': 0.828, 'center_y': 0.56}
+        pos_hint        = {'center_x': 0.828, 'center_y': 0.64}
     )
 
     #   ==========================================
@@ -227,8 +239,37 @@ def info_recipe(manager: ScreenManager):
     info_layout.add_widget(label_layout)
     return info_layout
 
-def camera_recipe(manager: ScreenManager):
-    pass
+def camera_recipe(manager: ScreenManager) -> Layout:
+    camera_frame    = Camera(
+        size_hint   = [0.20, None],
+        pos_hint    = {'center_x': 0.82, 'center_y': 0.248},
+        resolution  = [1, 1],
+    )
+    
+    recursive_flag  = False
+    def on_cam_size(camera, size):
+        nonlocal recursive_flag
+        if recursive_flag:
+            return
+        
+        _rec_flag           = recursive_flag
+        recursive_flag      = True
+
+        camera.size         = [size[0], size[0]]
+        camera.resolution   = camera.size
+
+        recursive_flag      = _rec_flag
+
+    camera_frame.bind(size=on_cam_size)
+    camera_frame.play       = True
+    return camera_frame
+
+def remove_layout_widget(app_layout: FloatLayout, widget: Widget):
+    try:
+        _app_layout_elements.remove(widget)
+        app_layout.remove_widget(widget)
+    except ValueError:
+        pass
 
 def add_layout_widget(app_layout, widget):
     _app_layout_elements.append(widget)
@@ -238,11 +279,13 @@ def page_recipe(manager: ScreenManager):
     app_layout      = FloatLayout()
     app_bg          = Image(source=cfg.user_page, fit_mode = "fill")
 
+    global _manager, _app_layout
+    _manager, _app_layout   = manager, app_layout
+
     add_layout_widget(app_layout, app_bg)
     add_layout_widget(app_layout, counter_recipe(manager))
     add_layout_widget(app_layout, exercise_recipe(manager))
     add_layout_widget(app_layout, info_recipe(manager))
-    # add_layout_widget(app_layout, camera_recipe(manager))
 
     return app_layout
 
@@ -261,13 +304,18 @@ class ExercisePage:
     info_layout index is 3.
     '''
 
-    def get_exercise_count():
+    def get_exercise_count() -> int:
         '''
         Returns the count value found at the left side of the page.
         '''
         app_layout      = _app_layout_elements[1]
         app_widget      = app_layout.children[0].children[0]
-        return int(app_widget.text)
+        value           = app_widget.text
+        try:
+            value       = int(value)
+        except ValueError:
+            value       = int(float(value))
+        return value
     
     def set_exercise_count(value: int):
         '''
@@ -327,10 +375,140 @@ class ExercisePage:
         app_widget          = app_layout.children[0]
         app_widget.source   = new_src
 
+    _scheduler              = None
+    _countdown              = None
 
-    _subscriber_fun         = []
-    def add_subscriber(fun: Callable[[None], None]):
-        if (fun is None):
+    # =====================================================
+    #                     Camera Feed
+    # =====================================================
+    def render_camera_feed():
+        global _manager
+        if _manager.current != home.HomePage.index_to_screen(7):
             return
         
-        ExercisePage._subscriber_fun.append(fun)
+        camera_frame            = _app_layout_elements[4]
+        if camera_frame.texture is None:
+            return
+        
+        try:
+            cv_texture          = cv2.cvtColor(camera_frame.texture.pixels, cv2.COLOR_RGBA2BGR)
+        except:
+            return
+        
+        cur_exercise: Exercise  = home.app_data['exercise_list'][0]
+        if cur_exercise._base.monitor is None:
+            return
+        
+        # Try checking if the pose is detected.
+        try:
+            # cur_exercise._base.monitor is defined
+            # in the exer_class_pose_detect.py file.
+            if cur_exercise._base.monitor(cv_texture) == ReturnCode.SUCCESS:
+                ExercisePage.set_exercise_reps(ExercisePage.get_exercise_reps() + 1)
+        except:
+            pass
+        
+    def init_camera_feed():
+        try:
+            camera_frame        = _app_layout_elements[4]
+            camera_frame.play   = True
+        except IndexError:
+            pass
+
+    def unload_camera_feed():
+        ExercisePage._video_cap     = None
+
+    def on_tick_update(*args):
+        ExercisePage.render_camera_feed()
+
+    def while_countdown(*args):
+        if ExercisePage._countdown is None:
+            return
+        
+        ExercisePage.set_exercise_count(ExercisePage.get_exercise_count() - 1)
+        if (ExercisePage.get_exercise_count() < 1):
+            on_page_unload()
+
+    def schedule_clock():
+        ExercisePage.unschedule_clock()
+        ExercisePage._scheduler  = Clock.schedule_interval(
+            ExercisePage.on_tick_update,
+            tick_rate,
+        )
+        ExercisePage._countdown  = Clock.schedule_interval(
+            ExercisePage.while_countdown,
+            1.0,
+        )
+
+    def unschedule_clock():
+        if (not (ExercisePage._scheduler is None)):
+            Clock.unschedule(ExercisePage._scheduler)
+            ExercisePage._scheduler  = None
+
+        if (not (ExercisePage._countdown is None)):
+            Clock.unschedule(ExercisePage._countdown)
+            ExercisePage._countdown  = None
+
+    def update_exer_list():
+        try:
+            exer_list: list = home.app_data['exercise_list']
+        except:
+            return
+        
+        exercise: Exercise  = exer_list[0]
+        exercise.sets      -= 1
+        if (exercise.sets < 1):
+            exer_list.pop(0)
+
+def render_exercise(exercise: Exercise):
+    ExercisePage.init_camera_feed()
+    ExercisePage.schedule_clock()
+
+    ExercisePage.set_exercise_image(exercise.img_path)
+    ExercisePage.set_exercise(exercise.exer_name)
+    ExercisePage.set_exercise_reps(0)
+    ExercisePage.set_exercise_count(exercise.duration)
+
+def load_cooldown_page(*args):
+    ExercisePage.unload_camera_feed()
+
+    global _manager
+    _manager.transition = SlideTransition(direction='left')
+    _manager.current    = home.HomePage.index_to_screen(8)
+
+def on_page_load():
+    try:
+        exer_list   = home.app_data['exercise_list']
+        render_exercise(exer_list[0])
+    except KeyError:
+        # No list exists.
+        _manager.transition = SlideTransition(direction='left')
+        _manager.current    = home.HomePage.index_to_screen(9)
+
+def _page_unload():
+    ExercisePage.unschedule_clock()
+    ExercisePage.update_exer_list()
+    Clock.schedule_once(
+        load_cooldown_page,
+        0.25,
+    )
+
+def _on_page_preload():
+    global _app_layout_elements, _app_layout, _manager
+    try:
+        camera_frame                = _app_layout_elements[4]
+    except IndexError:
+        camera_frame                = add_layout_widget(_app_layout, camera_recipe(_manager))
+
+    if camera_frame is None:
+        return    
+    camera_frame.play               = True
+
+def on_page_preload():
+    global _app_layout_elements
+    try:
+        camera_frame                = _app_layout_elements[4]
+    except IndexError:
+        _on_page_preload()
+
+on_page_unload  = _page_unload

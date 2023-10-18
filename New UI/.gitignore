@@ -1,0 +1,11 @@
+config.py
+assets\*
+assets
+*.bat
+*.xcf
+__pycache__
+venv/*
+venv
+fq_pose_detection/
+# venv/Lib/site-packages/werkzeug/debug/shared/*.png
+static/fonts/*.txt

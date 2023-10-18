@@ -5,6 +5,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.clock import Clock
 
+import kivy_exercise_page as exer_page
 import kivy_homepage as home
 import kivy_config as cfg
 
@@ -27,6 +28,8 @@ class LoadScreen(Screen):
         global counter_event
         counter_event       = None
         _manager.current    = home.HomePage.index_to_screen(7)
+        exer_page.on_page_preload()
+        exer_page.on_page_load()
 
     def update_tick(*args):
         set_tick(get_tick() - 1)
@@ -41,7 +44,7 @@ class LoadScreen(Screen):
             Clock.unschedule(counter_event)
             
         counter_event   = Clock.schedule_interval(LoadScreen.update_tick, 1)
-        set_tick(3)
+        set_tick(5)
 
 def page_recipe(manager: ScreenManager):
     global _manager

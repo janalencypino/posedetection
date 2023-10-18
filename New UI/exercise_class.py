@@ -1,42 +1,61 @@
+from kivy_config import strict_mode
+
 _exercise_dict  = {}
-class BaseExercise:
+class ExerciseTemplate:
     def __init__(self,
-            exer_name: str,
-            img_path: str,
-            reps: int,
-            sets: int):
+                 exer_name: str,
+                 img_path: str,
+                 reps: int,
+                 sets: int,
+                 duration: int):
         
         self.exer_name  = exer_name
         self.img_path   = img_path
         self.reps       = reps
         self.sets       = sets
+        self.duration   = duration
 
     def add_exercise(exer_name: str,
-                    img_path: str,
-                    reps: int,
-                    sets: int):
+                    **kwargs):
+        '''
+        Argument list (*args) in order:
+        -   img_path: str
+        -   reps: int
+        -   sets: int
+        -   duration: int
+        '''
         if (exer_name in _exercise_dict):
             return _exercise_dict[exer_name]
 
-        exercise                    = BaseExercise(exer_name, img_path, reps, sets)
+        exercise                    = ExerciseTemplate(exer_name, **kwargs)
         _exercise_dict[exer_name]   = exercise
         return exercise
     
-    def get_exercise(exer_name):
+    def get_exercise(exer_name: str):
         return ((exer_name in _exercise_dict) and _exercise_dict[exer_name]) or None
     
-class Exercise(BaseExercise):
-    def __init__(self, **kwargs):
-        super(Exercise, self).__init__(**kwargs)
+class Exercise(ExerciseTemplate):
+    def __init__(self,
+                 base: ExerciseTemplate):
 
-    def copy(base: BaseExercise):
-        return Exercise(base.exer_name, base.img_path,
-                        base.reps, base.sets)
+        self._base      = base
+        self.exer_name  = base.exer_name
+        self.img_path   = base.img_path
+        self.reps       = base.reps
+        self.sets       = base.sets
+        self.duration   = base.duration
+
+    def copy(base: ExerciseTemplate):
+        object =  Exercise(base)
+        return object
     
-    def add_exercise(exer_name: str, img_path: str, reps: int, sets: int):
+    def add_exercise(exer_name: str, **kwargs):
         return None
     
-    def get_exercise(exer_name):
+    def get_exercise(exer_name: str) -> None:
+        if strict_mode:
+            raise RuntimeWarning("Do not use Exercise.get_exercise(). Please use ExerciseTemplate.get_exercise() only.")
+        
         return None
 
 def exercise_dict() -> dict:

@@ -30,7 +30,7 @@ class HomePage(App):
     
     def new_trans_button(manager: ScreenManager, return_index: int,
                          do_transition: bool = True, callback: Callable[[None], None] = None,
-                         back_button: Button = None):
+                         back_button: Button = None, font_scale: float = 0.24):
         back_button             = ((not (back_button is None)) and back_button) or Button(
             text                = cfg.back_button_params['text'],
             size_hint           = cfg.back_button_params['size_hint'],
@@ -45,7 +45,7 @@ class HomePage(App):
         #       Back button definition
         #   ===============================
         def on_back_button_resize(back_button, size):
-            back_button.font_size   = 0.24*size[0]
+            back_button.font_size   = font_scale*size[0]
 
         def on_back_button_return(back_button):
             cur_index   = HomePage.screen_to_index(manager.current)
@@ -111,7 +111,7 @@ def render_app(app: App):
     import kivy_ready_made_routine as kv_routine
     kv_routine.load_exercises(load_exer.default_exer_list(),
                               load_exer.default_exer_desc())
-    # HomePage.get_manager().current  = HomePage.index_to_screen(7)
+    # HomePage.get_manager().current  = HomePage.index_to_screen(5)
     app.run()
 
 def prep_pages():
@@ -121,7 +121,8 @@ def prep_pages():
     import kivy_custom_routine
     import kivy_exercise_countdown
     import kivy_exercise_page
-    import exercise_class
+    import kivy_exercise_cooldown
+    import kivy_exercise_finished
 
     app     = HomePage(title="FitQuest")
     manager = HomePage._manager
@@ -154,6 +155,15 @@ def prep_pages():
     add_screen_page(manager,
                     kivy_exercise_page.page_recipe(manager),
                     HomePage.index_to_screen(7)
+                )
+    add_screen_page(manager,
+                    kivy_exercise_cooldown.page_recipe(manager),
+                    HomePage.index_to_screen(8),
+                    kivy_exercise_cooldown.LoadScreen,
+                )
+    add_screen_page(manager,
+                    kivy_exercise_finished.page_recipe(manager),
+                    HomePage.index_to_screen(9),
                 )
     return app
 

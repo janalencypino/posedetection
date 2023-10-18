@@ -456,7 +456,7 @@ class RoutineOptionHandler:
         return btn_image.children[0].children[1].children[widget_index]
     
 def load_exercises(exer_list, exer_desc_list):
-    from exercise_class import BaseExercise
+    from exercise_class import ExerciseTemplate, Exercise
 
     global _routine_list
     _routine_list   = exer_list
@@ -464,7 +464,7 @@ def load_exercises(exer_list, exer_desc_list):
         widget_root     = RoutineOptionHandler.get_option_widget_root(i)
         inner_list      = _routine_list[i]
         for j in range(len(inner_list)):
-            base_exercise: BaseExercise         = inner_list[j]
+            base_exercise: Exercise             = Exercise.copy(inner_list[j])
             option_widget: RoutineWidgetLayout  = widget_root.children[j]
             option_widget.set_reps(base_exercise.reps)
             option_widget.set_nsets(base_exercise.sets)
