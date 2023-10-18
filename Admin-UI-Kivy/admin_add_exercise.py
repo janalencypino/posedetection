@@ -65,7 +65,6 @@ class AdminAddExercise(Screen):
         # Load existing JSON data from the file
         self.load_data()
 
-    # ... keep all your other methods (load_data, add_exercise, cancel_adding) unchanged ...
 
     def load_data(self):
         try:
@@ -99,6 +98,7 @@ class AdminAddExercise(Screen):
                 }
                 image_info_list.append(image_info)
 
+
         exercise_data = {
             "name": exercise_name,
             "description": exercise_description,
@@ -109,6 +109,7 @@ class AdminAddExercise(Screen):
             "angle2": angle2,
             "images": image_info_list
         }
+        
 
         # Append the new exercise data to the existing exercises list
         self.exercises.append(exercise_data)
@@ -117,6 +118,22 @@ class AdminAddExercise(Screen):
         with open("exercises.json", "w") as json_file:
             json.dump(self.exercises, json_file, indent=4)
 
+        exercises_name = self.exercise_name.text
+
+
+        # Load the existing exercise names from the JSON file
+        with open("exercises_names.json", "r") as json_file:
+            data = json.load(json_file)
+
+        # Append the new exercise name to the existing list
+        data["exercise"].append(exercises_name)
+
+        # Save the updated exercise names to the JSON file
+        with open("exercises_names.json", "w") as json_file:
+            json.dump(data, json_file, indent=4)
+
+        # Validate input here if needed
+            
         # Optionally, clear the input fields
         self.exercise_name.text = ''
         self.exercise_description.text = ''
@@ -126,6 +143,7 @@ class AdminAddExercise(Screen):
         self.angle1.text = ''
         self.angle2.text = ''
         self.file_chooser.selection = []
+
 
     def cancel_adding(self, instance):
         # Close the screen or popup without saving data

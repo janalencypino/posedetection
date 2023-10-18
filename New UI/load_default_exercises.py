@@ -4,7 +4,7 @@ from exercise_class import ExerciseTemplate
 
 _desc_json          = None
 def populate_exercises():
-    exer_json_file  = open('exercises_config.json', 'r')
+    exer_json_file  = open('New UI/exercises_config.json', 'r')
     exer_json       = json.load(exer_json_file)
     for exercise in exer_json:
         _exer_dict  = exer_json[exercise]
@@ -17,7 +17,7 @@ def populate_exercises():
         )
         exer_class_pose_detect.cv_monitor(_exer_obj)
 
-    desc_json_file  = open('premade_desc.json', 'r')
+    desc_json_file  = open('New UI/premade_desc.json', 'r')
     desc_json       = json.load(desc_json_file)
 
     global _desc_json
