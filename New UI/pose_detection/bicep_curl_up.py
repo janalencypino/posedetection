@@ -13,7 +13,7 @@ ave     = 0
 inside  = 31
 
 ## Setup mediapipe instance
-def check(image):
+def check(image) -> int:
     ret_code    = ReturnCode.FAILURE
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         # Recolor image to RGB
@@ -42,8 +42,10 @@ def check(image):
             # Curl counter logic
             if angle > 160:
                 stage = "down"
+                print(f"bicep_curl_up.check >> stage is now down")
             if angle < 30 and stage =='down':
                 stage = "up"
+                print(f"bicep_curl_up.check >> stage is now up")
                 ret_code    = ReturnCode.SUCCESS
                 if inside > angle:
                     inside = angle

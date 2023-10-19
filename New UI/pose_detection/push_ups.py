@@ -52,13 +52,15 @@ def check(image) -> int:
             
             # push-up counter logic
             if angle <= 70:
-                stage = "down"      
+                stage = "down"
+                print(f"push_ups.check >> stage is now up")      
             elif stage =='down' and angle >= 160:
                 stage       = "up"
+                print(f"push_ups.check >> stage is now up")
                 if angle2 < 160 and angle2 < 180:
                     stage   = "wrong"
                 else: 
-                    ret_code    = ReturnCode.FAILURE    
+                    ret_code    = ReturnCode.SUCCESS    
             #    print(counter)
             if stage == 'up' and angle < 160:
                 ave += inside

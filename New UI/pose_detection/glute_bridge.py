@@ -11,7 +11,7 @@ mp_pose = mp.solutions.pose
 stage = None
 
 ## Setup mediapipe instance
-def check(image):
+def check(image) -> int:
     ret_code    = ReturnCode.FAILURE
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         # Recolor image to RGB
@@ -29,9 +29,9 @@ def check(image):
             landmarks = results.pose_landmarks.landmark
             
             # Get coordinates
-            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-            knee = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-            ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+            knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+            ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
             
             # Calculate angle
             angle = calculate_angle(hip, knee, ankle)
@@ -44,16 +44,22 @@ def check(image):
             
             #print(angle)
             # Lunge counter logic
-            if angle <120:
+            if angle < 120:
+                stage = "down"
+                print(f"glute_bridge.check >> stage is now down")
+            if angle > 170 and stage =='down':
                 stage = "up"
-                print(f"high_knees.check >> stage is now up")
-            if stage =='up' and angle >150:
-                stage="down"
-                print(f"high_knees.check >> stage is now down")
+                print(f"glute_bridge.check >> stage is now up")
                 ret_code    = ReturnCode.SUCCESS
-                # print(counter)
+            #   print(counter)
+                if inside > angle:
+                    inside = angle
+            if angle < 170 and stage == 'up':
+                ave += inside
+                inside = 169
+                stage = "down"
+                print(ave)
                         
         except:
             pass
-        
     return ret_code

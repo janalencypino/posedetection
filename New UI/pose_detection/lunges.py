@@ -46,8 +46,10 @@ def check(image) -> int:
             # Lunge counter logic
             if angle >160:
                 stage = "up"
+                print(f"lunges.check >> stage is now up")
             if stage =='up' and angle <90:
                 stage="down"
+                print(f"lunges.check >> stage is now down")
                 ret_code    = ReturnCode.SUCCESS
                         
         except:

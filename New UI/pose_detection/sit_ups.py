@@ -48,12 +48,13 @@ def check(image) -> int:
             # Curl counter logic
             if angle > 120:
                 stage       = "down"
-
+                print(f"sit_ups.check >> stage is now up")
             if angle < 30 and stage =='down':
                 stage       = "up"
+                print(f"sit_ups.check >> stage is now up")
+                ret_code    = ReturnCode.SUCCESS
                 if inside > angle:
                     inside  = angle
-                ret_code    = ReturnCode.SUCCESS
 
             if angle > 30 and stage == 'up':
                 ave += inside
